@@ -101,3 +101,35 @@
 body {
   font-family: var(--font-inter-sans);
 }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(180px); }
+}
+@keyframes floatReverse {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-180px); }
+}
+@keyframes float2 {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(28px); }
+}
+@keyframes floatReverse2 {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-28px); }
+}
+
+.animate-appearance {
+  animation: appearance 0.8s 0.2s cubic-bezier(0.39, 0.575, 0.28, 0.995) both;
+}
+
+@keyframes appearance {
+  from {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
