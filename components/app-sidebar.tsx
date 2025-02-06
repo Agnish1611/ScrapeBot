@@ -24,7 +24,7 @@ export function AppSidebar() {
   const pathname: string = usePathname();
 
   return (
-    <Sidebar className="max-sm:hidden" collapsible="icon">
+    <Sidebar className="max-md:hidden" collapsible="icon">
       <SidebarContent >
         <SidebarGroup>
           <SidebarGroupLabel className="p-5 my-5">

@@ -38,8 +38,12 @@ const CreateWorkflowDialog = ({ triggerText }: { triggerText?: string }) => {
     onSuccess: () => {
       toast.success("Workflow created successfully", { id: "create-workflow" });
     },
-    onError: () => {
-      toast.error("Failed to create workflow", { id: "create-workflow" });
+    onError: (ctx) => {
+      if (ctx.message === "NEXT_REDIRECT") {
+        toast.success("Workflow created successfully", { id: "create-workflow" });
+      } else {
+      toast.error(`Failed to create workflow ${ctx.message}`, { id: "create-workflow" });
+      }
     },
   });
 

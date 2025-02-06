@@ -25,10 +25,10 @@ const LayoutClient = ({
         <div className="flex flex-col flex-1 min-h-dvh">
           <header className="flex items-center justify-between px-6 py-4 max-sm:pl-14 h-[70px] container">
             <div className="flex items-center gap-4">
-              <div className="max-sm:hidden">
+              <div className="max-md:hidden">
                 <SidebarTrigger />
               </div>
-              <div className="sm:hidden">
+              <div className="md:hidden">
                 <MobileSidebar />
               </div>
               <BreadcrumbHeader />

@@ -9,9 +9,12 @@ import WorkFlowCard from "./_components/workflow-card";
 const page = () => {
   return (
     <div>
-      <div className="mb-10">
-        <h1 className="text-3xl font-bold">Workflows</h1>
-        <p className="text-sm text-muted-foreground">Manage your workflows</p>
+      <div className="flex w-full justify-between items-center mb-10">
+        <div>
+          <h1 className="text-3xl font-bold">Workflows</h1>
+          <p className="text-sm text-muted-foreground">Manage your workflows</p>
+        </div>
+        <CreateWorkflowDialog triggerText="Create workflow" />
       </div>
       <div>
         <Suspense fallback={<UserWorkflowsSkeleton />}>
