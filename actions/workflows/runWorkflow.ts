@@ -2,9 +2,13 @@
 
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
+import { executeWorkflow } from "@/lib/workflow/executeWorkflow";
 import { FlowToExecutionPlan } from "@/lib/workflow/exexutionPlan";
-import { WorkflowExecutionPlan } from "@/utils/types/workflow";
+import { TaskRegistry } from "@/lib/workflow/task/registry";
+import { ExecutionPhaseStatus, WorkflowExecutionPlan, WorkflowExecutionStatus, WorkflowExecutionTrigger } from "@/utils/types/workflow";
+import { User } from "lucide-react";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export async function runWorkflow(form: { workflowId: string, flowDefinition?: string }) {
     const session = await auth.api.getSession({
@@ -47,5 +51,38 @@ export async function runWorkflow(form: { workflowId: string, flowDefinition?: s
     }
 
     executionPlan = result.executionPlan;
-    console.log("Execution plan", executionPlan);
+
+    const execution = await prisma.workflowExecution.create({
+        data: {
+            workflowId,
+            userId: session.session.userId,
+            status: WorkflowExecutionStatus.PENDING,
+            startedAt: new Date(),
+            trigger: WorkflowExecutionTrigger.MANUAL,
+            phases: {
+                create: executionPlan.flatMap((phase) => {
+                    return phase.nodes.flatMap((node) => {
+                        return {
+                            userId: session.session.userId,
+                            status: ExecutionPhaseStatus.CREATED,
+                            number: phase.phase,
+                            node: JSON.stringify(node),
+                            name: TaskRegistry[node.data.type].label,
+                        }
+                    });
+                }),
+            }
+        },
+        select: {
+            id: true,
+            phases: true,
+        },
+    });
+
+    if (!execution) {
+        throw new Error("Failed to create workflow execution");
+    }
+
+    executeWorkflow(execution.id);
+    redirect(`/workflow/runs/${workflowId}/${execution.id}`);
 }

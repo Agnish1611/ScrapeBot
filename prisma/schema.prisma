@@ -14,27 +14,29 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid()) @map("_id")
+  id            String              @id @default(cuid()) @map("_id")
   name          String
-  email         String    @unique
-  emailVerified Boolean   @default(false)
+  email         String              @unique
+  emailVerified Boolean             @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
   sessions      Session[]
   accounts      Account[]
   workflows     Workflow[]
+  executions    WorkflowExecution[]
+  phases        ExecutionPhase[]
 }
 
 model Session {
-  id             String   @id @default(cuid()) @map("_id")
-  userId         String
-  token          String   
-  expiresAt      DateTime
-  ipAddress      String?
-  userAgent      String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id        String   @id @default(cuid()) @map("_id")
+  userId    String
+  token     String
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -67,16 +69,56 @@ model Verification {
 }
 
 model Workflow {
-  id          String   @id @default(cuid()) @map("_id")
-  userId      String
-  name        String
-  description String?
-  definition  String
-  status      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@unique([name, userId])
+  id            String              @id @default(cuid()) @map("_id")
+  userId        String
+  name          String
+  description   String?
+  definition    String
+  status        String
+  lastRunAt     DateTime?
+  lastRunId     String?
+  lastRunStatus String?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  executions    WorkflowExecution[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([name, userId])
+}
+
+model WorkflowExecution {
+  id              String           @id @default(cuid()) @map("_id")
+  workflowId      String
+  userId          String
+  trigger         String
+  status          String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  startedAt       DateTime?
+  completedAt     DateTime?
+  creditsConsumed Int              @default(0)
+  definition      String           @default("{}")
+  phases          ExecutionPhase[]
+
+  workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ExecutionPhase {
+  id                  String    @id @default(cuid()) @map("_id")
+  workflowExecutionId String
+  userId              String
+  status              String
+  number              Int
+  node                String
+  name                String
+  startedAt           DateTime?
+  completedAt         DateTime?
+  inputs              String?
+  outputs             String?
+  creditsCost         Int?
+
+  workflowExecution WorkflowExecution @relation(fields: [workflowExecutionId], references: [id], onDelete: Cascade)
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
