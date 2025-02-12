@@ -10,6 +10,8 @@ import { Environment, ExecutionEnvironment } from '@/utils/types/executor';
 import { TaskParamType } from '@/utils/types/task';
 import { Page } from 'puppeteer';
 import { Edge } from '@xyflow/react';
+import { LogCollector } from '@/utils/types/log';
+import { createLogCollector } from '../log';
 
 export async function executeWorkflow(executionId: string) {
     const execution = await prisma.workflowExecution.findUnique({
@@ -115,6 +117,7 @@ async function finalizeWorkflowExecution(executionId: string, workflowId: string
 }
 
 async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environment, edges: Edge[]) {
+    const logCollector = createLogCollector();
     const startedAt = new Date();
     const node = JSON.parse(phase.node) as AppNode;
     setupEnvironment(node, environment, edges);
@@ -133,14 +136,14 @@ async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environm
     const creditsRequired = TaskRegistry[node.data.type].credits;
 
     // todo: decrememt user balance (with required credits)
-    const success = await executePhase(phase, node, environment);
+    const success = await executePhase(phase, node, environment, logCollector);
 
     const outputs = environment.phases[node.id].outputs;
-    await finalizePhase(phase.id, success, outputs);
+    await finalizePhase(phase.id, success, outputs, logCollector);
     return { success };
 }
 
-async function finalizePhase(phaseId: string, success: boolean, outputs: any) {
+async function finalizePhase(phaseId: string, success: boolean, outputs: any, logCollector: LogCollector) {
     const finalStatus = success ? ExecutionPhaseStatus.COMPLETED : ExecutionPhaseStatus.FAILED;
 
     await prisma.executionPhase.update({
@@ -151,17 +154,26 @@ async function finalizePhase(phaseId: string, success: boolean, outputs: any) {
             status: finalStatus,
             completedAt: new Date(),
             outputs: JSON.stringify(outputs),
+            logs: {
+                createMany: {
+                    data: logCollector.getAll().map((log) => ({
+                        message: log.message,
+                        logLevel: log.level,
+                        timestamp: log.timestamp,
+                    })),
+                }
+            }
         },
     });
 }
 
-async function executePhase(phase: ExecutionPhase, node: AppNode, environment: Environment): Promise<boolean> {
+async function executePhase(phase: ExecutionPhase, node: AppNode, environment: Environment, logCollector: LogCollector): Promise<boolean> {
     const runFn = ExecutorRegistry[node.data.type];
     if (!runFn) {
         return false;
     }
 
-    const executionEnvironment: ExecutionEnvironment<any> = createExecutionEnvironment(node, environment);
+    const executionEnvironment: ExecutionEnvironment<any> = createExecutionEnvironment(node, environment, logCollector);
 
     return await runFn(executionEnvironment);
 }
@@ -190,7 +202,7 @@ function setupEnvironment(node: AppNode, environment: Environment, edges: Edge[]
     }
 }
 
-function createExecutionEnvironment(node: AppNode, environment: Environment): ExecutionEnvironment<any> {
+function createExecutionEnvironment(node: AppNode, environment: Environment, logCollector: LogCollector): ExecutionEnvironment<any> {
     return {
         getInput: (name: string) => environment.phases[node.id]?.inputs[name],
         setOutput: (name: string, value: string) => (environment.phases[node.id].outputs[name] = value),
@@ -200,6 +212,8 @@ function createExecutionEnvironment(node: AppNode, environment: Environment): Ex
 
         getPage: () => environment.page,
         setPage: (page: Page) => (environment.page = page),
+
+        log: logCollector,
     }
 }
 

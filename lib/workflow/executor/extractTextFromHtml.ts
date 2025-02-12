@@ -6,12 +6,12 @@ export async function ExtractTextFromElementExecutor(environment: ExecutionEnvir
     try {
         const selector = environment.getInput('Selector');
         if (!selector) {
-            console.error('Selector not defined');
+            environment.log.error('Selector not defined');
             return false;
         }
         const html = environment.getInput('Html');
         if (!html) {
-            console.error('Html not defined');
+            environment.log.error('Html not defined');
             return false;
         }
 
@@ -19,21 +19,21 @@ export async function ExtractTextFromElementExecutor(environment: ExecutionEnvir
         const element = $(selector);
 
         if (!element) {
-            console.error(`Element with selector ${selector} not found`);
+            environment.log.error(`Element with selector ${selector} not found`);
             return false;
         }
 
         const extractedText = $.text(element);
         if (!extractedText) {
-            console.error('Element has no text');
+            environment.log.error('Element has no text');
             return false;
         }
 
         environment.setOutput('Extracted text', extractedText);
 
         return true;
-    } catch (error) {
-        console.log(error);
+    } catch (error: any) {
+        environment.log.error(error.message);
         return false;
     }
 }

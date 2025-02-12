@@ -21,6 +21,7 @@ model User {
   image         String?
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
+  
   sessions      Session[]
   accounts      Account[]
   workflows     Workflow[]
@@ -80,6 +81,7 @@ model Workflow {
   lastRunStatus String?
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
+
   executions    WorkflowExecution[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -99,6 +101,7 @@ model WorkflowExecution {
   completedAt     DateTime?
   creditsConsumed Int              @default(0)
   definition      String           @default("{}")
+
   phases          ExecutionPhase[]
 
   workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
@@ -119,6 +122,18 @@ model ExecutionPhase {
   outputs             String?
   creditsCost         Int?
 
+  logs ExecutionLog[]
+
   workflowExecution WorkflowExecution @relation(fields: [workflowExecutionId], references: [id], onDelete: Cascade)
   user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ExecutionLog {
+  id               String   @id @default(cuid()) @map("_id")
+  logLevel         String
+  message          String
+  timestamp        DateTime @default(now())
+  executionPhaseId String
+
+  executionPhase ExecutionPhase @relation(fields: [executionPhaseId], references: [id], onDelete: Cascade)
 }

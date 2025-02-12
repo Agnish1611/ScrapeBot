@@ -19,5 +19,12 @@ export async function getPhaseDetails(phaseId: string) {
                 userId: session.session.userId,
             }
         },
+        include: {
+            logs: {
+                orderBy: {
+                    timestamp: "asc",
+                }
+            },
+        }
     });
 }
