@@ -1,4 +1,4 @@
-import { Environment, ExecutionEnvironment } from '@/utils/types/executor';
+import { ExecutionEnvironment } from '@/utils/types/executor';
 import puppeteer from 'puppeteer';
 import { LaunchBrowserTask } from '../task/launch-browser';
 

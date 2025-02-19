@@ -19,6 +19,7 @@ import { sidebarItems } from "@/utils/constants/sidebar";
 import { SidebarItem } from "@/utils/types/sidebar";
 import { buttonVariants } from "./ui/button";
 import { useTheme } from "next-themes";
+import UserAvailableCredits from "./user-available-credits";
 
 export function AppSidebar() {
   const pathname: string = usePathname();
@@ -37,6 +38,7 @@ export function AppSidebar() {
             />
           </SidebarGroupLabel>
           <SidebarGroupContent>
+            <div className="p-2"><UserAvailableCredits /></div>
             <SidebarMenu>
               {sidebarItems.map((item: SidebarItem) => (
                 <SidebarMenuItem

@@ -13,6 +13,7 @@ import {
   SidebarMenuItem,
 } from "./ui/sidebar";
 import { useTheme } from "next-themes";
+import UserAvailableCredits from "./user-available-credits";
 
 const MobileSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,6 +65,7 @@ const MobileSidebar = () => {
             />
           </div>
           <SidebarGroupContent>
+          <div className="p-2"><UserAvailableCredits /></div>
             <SidebarMenu>
               {sidebarItems.map((item: SidebarItem) => (
                 <SidebarMenuItem

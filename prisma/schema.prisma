@@ -14,20 +14,20 @@ datasource db {
 }
 
 model User {
-  id            String              @id @default(cuid()) @map("_id")
+  id            String   @id @default(cuid()) @map("_id")
   name          String
-  email         String              @unique
-  emailVerified Boolean             @default(false)
+  email         String   @unique
+  emailVerified Boolean  @default(false)
   image         String?
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
-  credits       Int                 @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  credits       Int      @default(0)
 
-  sessions      Session[]
-  accounts      Account[]
-  workflows     Workflow[]
-  executions    WorkflowExecution[]
-  phases        ExecutionPhase[]
+  sessions   Session[]
+  accounts   Account[]
+  workflows  Workflow[]
+  executions WorkflowExecution[]
+  phases     ExecutionPhase[]
 }
 
 model Session {
@@ -71,19 +71,21 @@ model Verification {
 }
 
 model Workflow {
-  id            String              @id @default(cuid()) @map("_id")
+  id            String    @id @default(cuid()) @map("_id")
   userId        String
   name          String
   description   String?
   definition    String
+  executionPlan String?
+  creditsCost   Int       @default(0)
   status        String
   lastRunAt     DateTime?
   lastRunId     String?
   lastRunStatus String?
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  executions    WorkflowExecution[]
+  executions WorkflowExecution[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -91,19 +93,19 @@ model Workflow {
 }
 
 model WorkflowExecution {
-  id              String           @id @default(cuid()) @map("_id")
+  id              String    @id @default(cuid()) @map("_id")
   workflowId      String
   userId          String
   trigger         String
   status          String
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
   startedAt       DateTime?
   completedAt     DateTime?
-  creditsConsumed Int              @default(0)
-  definition      String           @default("{}")
+  creditsConsumed Int       @default(0)
+  definition      String    @default("{}")
 
-  phases          ExecutionPhase[]
+  phases ExecutionPhase[]
 
   workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)

@@ -24,6 +24,7 @@ import {
 import Link from "next/link";
 import DeleteWorkflowDialog from "./delete-workflow-dialog";
 import { useState } from "react";
+import RunBtn from "./run-btn";
 
 const statusColors = {
   [WorkflowStatus.DRAFT]: "bg-yellow-400 text-yellow-600",
@@ -33,7 +34,7 @@ const WorkFlowCard = ({ workflow }: { workflow: Workflow }) => {
   const isDraft = workflow.status === WorkflowStatus.DRAFT;
 
   return (
-    <Card className="border border-separate shadow-sm rounded-lg overflow-hidden hover:shadow-md dark:shadow-primary/30">
+    <Card className="border border-separate bg-transparent rounded-lg overflow-hidden hover:shadow-lg dark:shadow-primary/30">
       <CardContent className="p-4 flex items-center justify-between h-[100px]">
         <div className="flex items-center justify-end space-x-3">
           <div
@@ -65,6 +66,7 @@ const WorkFlowCard = ({ workflow }: { workflow: Workflow }) => {
           </div>
         </div>
         <div className="flex items-center space-x-2">
+          {!isDraft && <RunBtn workflowId={workflow.id} />}
           <Link
             href={`/workflow/editor/${workflow.id}`}
             className={cn(
