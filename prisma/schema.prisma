@@ -23,11 +23,12 @@ model User {
   updatedAt     DateTime @updatedAt
   credits       Int      @default(0)
 
-  sessions   Session[]
-  accounts   Account[]
-  workflows  Workflow[]
-  executions WorkflowExecution[]
-  phases     ExecutionPhase[]
+  sessions    Session[]
+  accounts    Account[]
+  workflows   Workflow[]
+  executions  WorkflowExecution[]
+  phases      ExecutionPhase[]
+  credentials Credential[]
 }
 
 model Session {
@@ -141,4 +142,16 @@ model ExecutionLog {
   executionPhaseId String
 
   executionPhase ExecutionPhase @relation(fields: [executionPhaseId], references: [id], onDelete: Cascade)
+}
+
+model Credential {
+  id        String   @id @default(cuid()) @map("_id")
+  userId    String
+  name      String
+  value     String
+  createdAt DateTime @default(now())
+
+  @@unique([name, userId])
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
