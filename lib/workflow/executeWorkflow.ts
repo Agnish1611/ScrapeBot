@@ -13,7 +13,7 @@ import { Edge } from '@xyflow/react';
 import { LogCollector } from '@/utils/types/log';
 import { createLogCollector } from '../log';
 
-export async function executeWorkflow(executionId: string) {
+export async function executeWorkflow(executionId: string, nextRunAt?: Date) {
     const execution = await prisma.workflowExecution.findUnique({
         where: {
             id: executionId,
@@ -32,7 +32,7 @@ export async function executeWorkflow(executionId: string) {
 
     const environment: Environment = { phases: {} };
 
-    await initializeWorkflowExecution(executionId, execution.workflowId);
+    await initializeWorkflowExecution(executionId, execution.workflowId, nextRunAt);
     await initializePhaseStatus(execution);
 
     let creditsConsumed = 0;
@@ -52,7 +52,7 @@ export async function executeWorkflow(executionId: string) {
     revalidatePath('/workflow/runs');
 }
 
-async function initializeWorkflowExecution(executionId: string, workflowId: string) {
+async function initializeWorkflowExecution(executionId: string, workflowId: string, nextRunAt?: Date) {
     await prisma.workflowExecution.update({
         where: {
             id: executionId,
@@ -71,6 +71,7 @@ async function initializeWorkflowExecution(executionId: string, workflowId: stri
             lastRunAt: new Date(),
             lastRunStatus: WorkflowExecutionStatus.RUNNING,
             lastRunId: executionId,
+            ...(nextRunAt && { nextRunAt }),
         },
     });
 }
