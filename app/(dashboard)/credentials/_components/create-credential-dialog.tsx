@@ -43,6 +43,8 @@ const CreateCredentialDialog = ({ triggerText }: { triggerText?: string }) => {
       toast.success("Credential created successfully", {
         id: "create-credential",
       });
+      form.reset();
+      setOpen(false);
     },
     onError: (ctx) => {
       if (ctx.message === "NEXT_REDIRECT") {
@@ -68,10 +70,7 @@ const CreateCredentialDialog = ({ triggerText }: { triggerText?: string }) => {
   return (
     <Dialog
       open={open}
-      onOpenChange={(open) => {
-        form.reset();
-        setOpen(open);
-      }}
+      onOpenChange={setOpen}
     >
       <DialogTrigger asChild>
         <Button>{triggerText ?? "Create"}</Button>

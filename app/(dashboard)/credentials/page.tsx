@@ -11,7 +11,7 @@ import DeleteCredentialDialog from "./_components/delete-credential-dialog";
 const CredentialsPage = () => {
   return (
     <div className="flex flex-col flex-1 h-full">
-      <div className="flex justify-center">
+      <div className="flex justify-between">
         <div className="flex flex-col">
           <h1 className="text-3xl font-bold">Credentials</h1>
           <p className="text-muted-foreground">Manage your credentials</p>
@@ -46,7 +46,7 @@ const UserCredentials = async () => {
 
   if (credentials.length === 0) {
     return (
-      <Card className="w-full p-4">
+      <Card className="w-full p-4 flex">
         <div className="flex flex-col items-center gap-4 justify-center">
           <div className="rounded-full bg-accent w-20 h-20 flex items-center justify-center">
             <ShieldOffIcon size={40} className="stroke-primary" />
@@ -67,7 +67,7 @@ const UserCredentials = async () => {
         const createdAt = formatDistanceToNow(credential.createdAt, { addSuffix: true});
 
         return (
-            <Card key={credential.id} className="w-full p-4 justify-between">
+            <Card key={credential.id} className="w-full p-4 flex justify-between">
                 <div className="flex gap-2 items-center">
                     <div className="rounded-full bg-primary/10 w-8 h-8 flex items-center justify-center">
                         <LockKeyholeIcon size={18} className="stroke-primary" />
