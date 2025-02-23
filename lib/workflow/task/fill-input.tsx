@@ -7,7 +7,6 @@ export const FillInputTask = {
   label: "Fill input",
   icon: (props) => <Edit3Icon className="stroke-primary" {...props} />,
   isEntryPoint: false,
-  
   credits: 1,
   inputs: [
     {

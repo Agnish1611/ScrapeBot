@@ -1,12 +1,12 @@
 import { TaskParamType, TaskType } from "@/utils/types/task";
 import { WorkflowTask } from "@/utils/types/workflow";
-import { FileJson2Icon, LucideProps, MousePointerClick, TextIcon } from "lucide-react";
+import { DatabaseIcon, FileJson2Icon, LucideProps, MousePointerClick, TextIcon } from "lucide-react";
 
-export const ReadPropertyFromJsonTask = {
-  type: TaskType.READ_PROPERTY_FROM_JSON,
-  label: "Read property from JSON",
+export const AddPropertyToJsonTask = {
+  type: TaskType.ADD_PROPERTY_TO_JSON,
+  label: "Add property to JSON",
   icon: (props) => (
-    <FileJson2Icon className="stroke-primary" {...props} />
+    <DatabaseIcon className="stroke-primary" {...props} />
   ),
   isEntryPoint: false,
   credits: 1,
@@ -21,10 +21,15 @@ export const ReadPropertyFromJsonTask = {
       type: TaskParamType.STRING,
       required: true,
     },
+    {
+      name: "Property value",
+      type: TaskParamType.STRING,
+      required: true,
+    },
   ] as const,
   outputs: [
     {
-      name: "Property value",
+      name: "Update JSON",
       type: TaskParamType.STRING,
     },
   ] as const,
