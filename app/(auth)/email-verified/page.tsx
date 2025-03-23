@@ -21,7 +21,7 @@ const EmailVerified = () => {
             </p>
           </div>
 
-          <Link href="/">
+          <Link href="/setup">
             <button className="bg-orange-500 mt-10 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-200 font-medium">
               Go to Homepage
             </button>
