@@ -14,6 +14,7 @@ export async function POST(request: Request) {
             case 'checkout.session.completed':
                 updateCheckoutSessionCompleted(event.data.object);
                 break;
+            // case 'payment_intent.payment_failed':
             default:
                 break;
         }

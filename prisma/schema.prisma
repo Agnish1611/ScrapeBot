@@ -29,6 +29,7 @@ model User {
   executions  WorkflowExecution[]
   phases      ExecutionPhase[]
   credentials Credential[]
+  purchases   UserPurchase[]
 }
 
 model Session {
@@ -151,7 +152,19 @@ model Credential {
   value     String
   createdAt DateTime @default(now())
 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([name, userId])
+}
+
+model UserPurchase {
+  id          String   @id @default(cuid()) @map("_id")
+  userId      String
+  stripeId    String
+  description String
+  amount      Int
+  currency    String
+  date        DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
