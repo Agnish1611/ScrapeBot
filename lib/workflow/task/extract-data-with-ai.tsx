@@ -1,6 +1,6 @@
 import { TaskParamType, TaskType } from "@/utils/types/task";
 import { WorkflowTask } from "@/utils/types/workflow";
-import { BrainIcon, LucideProps, MousePointerClick, TextIcon } from "lucide-react";
+import { BrainIcon } from "lucide-react";
 
 export const ExtractDataWithAITask = {
   type: TaskType.EXTRACT_DATA_WITH_AI,

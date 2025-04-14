@@ -1,13 +1,19 @@
+// app/workflow/editor/[workflowId]/page.tsx
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 import Editor from "../../_components/editor";
 
-const page = async ({ params }: { params: { workflowId: string } }) => {
-  const { workflowId } = await params;
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+interface PageProps {
+  params: {
+    workflowId: string;
+  };
+}
+
+const Page = async ({ params }: PageProps) => {
+  const { workflowId } = params;
+
+  const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return <div>Unauthenticated</div>;
   }
@@ -26,4 +32,4 @@ const page = async ({ params }: { params: { workflowId: string } }) => {
   return <Editor workflow={workflow} />;
 };
 
-export default page;
+export default Page;

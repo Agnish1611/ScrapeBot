@@ -2,9 +2,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CreateFlowNode } from "@/lib/workflow/createFlowNode";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
-import { AppNode, AppNodeData } from "@/utils/types/appNode";
+import { AppNode } from "@/utils/types/appNode";
 import { TaskType } from "@/utils/types/task";
-import { NodeProps, useReactFlow } from "@xyflow/react";
+import { useReactFlow } from "@xyflow/react";
 import { CoinsIcon, CopyIcon, GripVerticalIcon, TrashIcon } from "lucide-react";
 import React from "react";
 
@@ -43,7 +43,10 @@ const NodeHeader = ({ taskType, nodeId }: { taskType: TaskType, nodeId: string }
                 const node = getNode(nodeId) as AppNode;
 
                 const newX = node?.position.x;
-                const newY = node?.position.y + node.measured?.height! + 20;
+                let newY = node?.position.y + 20;
+                if (node.measured) {
+                  newY += node.measured.height!;
+                }
 
                 const newNode = CreateFlowNode(node?.data.type, {
                     x: newX,

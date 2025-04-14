@@ -1,7 +1,4 @@
 import { ExecutionEnvironment } from '@/utils/types/executor';
-import puppeteer from 'puppeteer';
-import { LaunchBrowserTask } from '../task/launch-browser';
-import { PageToHtmlTask } from '../task/page-to-html';
 import { FillInputTask } from '../task/fill-input';
 
 export async function FillInputExecutor(environment: ExecutionEnvironment<typeof FillInputTask>): Promise<boolean> {
@@ -19,8 +16,12 @@ export async function FillInputExecutor(environment: ExecutionEnvironment<typeof
 
         await environment.getPage()!.type(selector, value);
         return true;
-    } catch (error: any) {
-        environment.log.error(error.message);
+    } catch (error) {
+        if (error instanceof Error) {
+            environment.log.error(error.message);
+        } else {
+            environment.log.error('An unknown error occurred');
+        }
         return false;
     }
 }

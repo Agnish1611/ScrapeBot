@@ -1,6 +1,6 @@
 import { TaskParamType, TaskType } from "@/utils/types/task";
 import { WorkflowTask } from "@/utils/types/workflow";
-import { CodeIcon, Edit3Icon, LucideProps } from "lucide-react";
+import { Edit3Icon } from "lucide-react";
 
 export const FillInputTask = {
   type: TaskType.FILL_INPUT,

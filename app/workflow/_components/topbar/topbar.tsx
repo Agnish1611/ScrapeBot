@@ -3,7 +3,7 @@
 import TooltipWrapper from "@/components/tooltip-wrapper";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
 import SaveBtn from "./save-btn";
 import ExecuteBtn from "./execute-btn";

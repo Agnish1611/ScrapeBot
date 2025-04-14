@@ -56,6 +56,7 @@ const SchedulerDialog = (props: {
       setValidCron(true);
       setReadableCron(readableCronsStr);
     } catch (error) {
+      console.log(error);
       setValidCron(false);
     }
   }, [cron]);

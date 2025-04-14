@@ -12,6 +12,7 @@ function isValidSecret(secret: string) {
     try {
         return timingSafeEqual(Buffer.from(secret), Buffer.from(API_SECRET));
     } catch (error) {
+        console.log(error);
         return false;
     }
 }
@@ -80,6 +81,7 @@ export async function GET(request: Request) {
         await executeWorkflow(execution.id, nextRun);
         return new Response(null, { status: 200 });
     } catch (error) {
+        console.log(error);
         return Response.json({ error: 'Internal server error' }, { status: 500 });
     }
 }

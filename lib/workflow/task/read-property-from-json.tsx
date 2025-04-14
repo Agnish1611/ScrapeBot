@@ -1,6 +1,6 @@
 import { TaskParamType, TaskType } from "@/utils/types/task";
 import { WorkflowTask } from "@/utils/types/workflow";
-import { FileJson2Icon, LucideProps, MousePointerClick, TextIcon } from "lucide-react";
+import { FileJson2Icon } from "lucide-react";
 
 export const ReadPropertyFromJsonTask = {
   type: TaskType.READ_PROPERTY_FROM_JSON,

@@ -1,6 +1,6 @@
 import { TaskParamType, TaskType } from "@/utils/types/task";
 import { WorkflowTask } from "@/utils/types/workflow";
-import { ArrowUpIcon, LucideProps, MousePointerClick, TextIcon } from "lucide-react";
+import { ArrowUpIcon } from "lucide-react";
 
 export const ScrollToElementTask = {
   type: TaskType.SCROLL_TO_ELEMENT,

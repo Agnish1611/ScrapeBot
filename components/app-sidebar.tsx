@@ -18,7 +18,6 @@ import {
 import { sidebarItems } from "@/utils/constants/sidebar";
 import { SidebarItem } from "@/utils/types/sidebar";
 import { buttonVariants } from "./ui/button";
-import { useTheme } from "next-themes";
 import UserAvailableCredits from "./user-available-credits";
 
 export function AppSidebar() {

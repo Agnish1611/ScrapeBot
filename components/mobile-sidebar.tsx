@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Kanban, Menu, X } from "lucide-react";
+import { Kanban, X } from "lucide-react";
 import Image from "next/image";
-import { Button, buttonVariants } from "./ui/button";
+import { buttonVariants } from "./ui/button";
 import { sidebarItems } from "@/utils/constants/sidebar";
 import { SidebarItem } from "@/utils/types/sidebar";
 import { usePathname } from "next/navigation";

@@ -1,8 +1,6 @@
 import { getWorkflowExecution } from "@/actions/workflows/getWorkflowExecution";
 import Topbar from "@/app/workflow/_components/topbar/topbar";
-import { auth } from "@/auth";
 import { Loader2Icon } from "lucide-react";
-import { headers } from "next/headers";
 import { Suspense } from "react";
 import ExecutionViewer from "./_components/execution-viewer";
 

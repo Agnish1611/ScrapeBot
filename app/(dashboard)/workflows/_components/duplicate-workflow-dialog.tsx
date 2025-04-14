@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CopyIcon, Layers2Icon } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -22,10 +21,8 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   duplicateWorkflowSchema,
   duplicateWorkflowSchemaType,
-  workflowSchema,
 } from "@/lib/zod";
 import { useMutation } from "@tanstack/react-query";
-import { createWorkflow } from "@/actions/workflows/createWorkflow";
 import { toast } from "sonner";
 import LoadingButton from "@/components/loading-button";
 import { duplicateWorkflow } from "@/actions/workflows/duplicateWorkflow";

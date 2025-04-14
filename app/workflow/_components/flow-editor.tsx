@@ -46,7 +46,9 @@ const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
       if (!flow.viewport) return;
       const { x = 0, y = 0, zoom = 1 } = flow.viewport;
       setViewport({ x, y, zoom });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }, [workflow.definition, setEdges, setNodes, setViewport]);
 
   const onDragOver = useCallback((e: React.DragEvent) => {
@@ -115,7 +117,7 @@ const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
     const detectedCycle = hasCycle(target);
 
     return !detectedCycle;
-  }, [nodes]);
+  }, [nodes, edges]);
 
   return (
     <main className="h-full w-full">

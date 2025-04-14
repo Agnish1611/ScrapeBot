@@ -4,10 +4,9 @@ import CustomDialogHeader from "@/components/custom-dialog-header";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Layers2Icon, ShieldEllipsis } from "lucide-react";
+import { ShieldEllipsis } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -22,10 +21,8 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   createCredentialSchema,
   createCredentialSchemaType,
-  workflowSchema,
 } from "@/lib/zod";
 import { useMutation } from "@tanstack/react-query";
-import { createWorkflow } from "@/actions/workflows/createWorkflow";
 import { toast } from "sonner";
 import LoadingButton from "@/components/loading-button";
 import { createCredential } from "@/actions/credentials/createCredential";

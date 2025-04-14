@@ -1,9 +1,4 @@
 import { ExecutionEnvironment } from '@/utils/types/executor';
-import puppeteer from 'puppeteer';
-import { LaunchBrowserTask } from '../task/launch-browser';
-import { PageToHtmlTask } from '../task/page-to-html';
-import { FillInputTask } from '../task/fill-input';
-import { ClickElementTask } from '../task/click-element';
 import { WaitForElementTask } from '../task/wait-for-element';
 
 export async function WaitForElementExecutor(environment: ExecutionEnvironment<typeof WaitForElementTask>): Promise<boolean> {
@@ -22,8 +17,12 @@ export async function WaitForElementExecutor(environment: ExecutionEnvironment<t
 
         await environment.getPage()!.waitForSelector(selector, { visible: visibilty === 'visible', hidden: visibilty === 'hidden' });
         return true;
-    } catch (error: any) {
-        environment.log.error(error.message);
+    } catch (error) {
+        if (error instanceof Error) {
+            environment.log.error(error.message);
+        } else {
+            environment.log.error('An unknown error occurred');
+        }
         return false;
     }
 }

@@ -7,13 +7,14 @@ import { useReactFlow } from "@xyflow/react";
 import { useCallback } from "react";
 import useFlowValidation from "./useFlowValidation";
 import { toast } from "sonner";
+import { ValidationError } from "next/dist/compiled/amphtml-validator";
 
 const useExecutionPlan = () => {
   const { toObject } = useReactFlow();
   const { setInvalidInputs, clearErrors } = useFlowValidation();
 
   const handleError = useCallback(
-    (error: any) => {
+    (error: ValidationError) => {
       switch (error.type) {
         case FlowToExecutionPlanValidationError.NO_ENTRY_POINT:
           toast.error("No entry point found in the flow");

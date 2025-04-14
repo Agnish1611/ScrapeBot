@@ -1,17 +1,22 @@
 import 'server-only';
 import prisma from '../prisma';
 import { revalidatePath } from 'next/cache';
-import { ExecutionPhaseStatus, WorkflowExecutionStatus } from '@/utils/types/workflow';
-import { ExecutionPhase } from '@prisma/client';
+import { ExecutionPhaseStatus, WorkflowExecutionStatus, WorkflowTask } from '@/utils/types/workflow';
+import { ExecutionPhase, Workflow, WorkflowExecution } from '@prisma/client';
 import { AppNode } from '@/utils/types/appNode';
 import { TaskRegistry } from './task/registry';
 import { ExecutorRegistry } from './executor/registry';
 import { Environment, ExecutionEnvironment } from '@/utils/types/executor';
 import { TaskParamType } from '@/utils/types/task';
-import { Page } from 'puppeteer';
+import { Browser, Page } from 'puppeteer';
 import { Edge } from '@xyflow/react';
 import { LogCollector } from '@/utils/types/log';
 import { createLogCollector } from '../log';
+
+type ExecutionWithRelations = WorkflowExecution & {
+    workflow: Workflow;
+    phases: ExecutionPhase[];
+};
 
 export async function executeWorkflow(executionId: string, nextRunAt?: Date) {
     const execution = await prisma.workflowExecution.findUnique({
@@ -76,11 +81,11 @@ async function initializeWorkflowExecution(executionId: string, workflowId: stri
     });
 }
 
-async function initializePhaseStatus(execution: any) {
+async function initializePhaseStatus(execution: ExecutionWithRelations) {
     await prisma.executionPhase.updateMany({
         where: {
             id: {
-                in: execution.phases.map((phase: any) => phase.id),
+                in: execution.phases.map((phase) => phase.id),
             }
         },
         data: {
@@ -112,8 +117,7 @@ async function finalizeWorkflowExecution(executionId: string, workflowId: string
             lastRunStatus: finalStatus,
         },
     }).catch((err) => {
-        // ignore
-        // this means that we have triggered other runs for this workflow while an execution was running
+        console.log(err);
     });
 }
 
@@ -148,7 +152,7 @@ async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environm
     return { success, creditsConsumed };
 }
 
-async function finalizePhase(phaseId: string, success: boolean, outputs: any, logCollector: LogCollector, creditsConsumed: number) {
+async function finalizePhase(phaseId: string, success: boolean, outputs: Record<string, unknown>, logCollector: LogCollector, creditsConsumed: number) {
     const finalStatus = success ? ExecutionPhaseStatus.COMPLETED : ExecutionPhaseStatus.FAILED;
 
     await prisma.executionPhase.update({
@@ -180,7 +184,7 @@ async function executePhase(phase: ExecutionPhase, node: AppNode, environment: E
         return false;
     }
 
-    const executionEnvironment: ExecutionEnvironment<any> = createExecutionEnvironment(node, environment, logCollector);
+    const executionEnvironment = createExecutionEnvironment<typeof TaskRegistry[typeof node.data.type]>(node, environment, logCollector);
 
     return await runFn(executionEnvironment);
 }
@@ -209,13 +213,13 @@ function setupEnvironment(node: AppNode, environment: Environment, edges: Edge[]
     }
 }
 
-function createExecutionEnvironment(node: AppNode, environment: Environment, logCollector: LogCollector): ExecutionEnvironment<any> {
+function createExecutionEnvironment<T extends WorkflowTask>(node: AppNode, environment: Environment, logCollector: LogCollector): ExecutionEnvironment<T> {
     return {
         getInput: (name: string) => environment.phases[node.id]?.inputs[name],
         setOutput: (name: string, value: string) => (environment.phases[node.id].outputs[name] = value),
 
         getBrowser: () => environment.browser,
-        setBrowser: (browser: any) => (environment.browser = browser),
+        setBrowser: (browser: Browser) => (environment.browser = browser),
 
         getPage: () => environment.page,
         setPage: (page: Page) => (environment.page = page),
@@ -245,6 +249,7 @@ async function decrementCredits(userId: string, credits: number, logCollector: L
         });
         return true;
     } catch (error) {
+        console.log(error);
         logCollector.error('Insufficient balance');
         return false;
     }

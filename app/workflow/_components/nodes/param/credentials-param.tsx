@@ -14,6 +14,11 @@ import { ParamProps } from "@/utils/types/appNode";
 import { useQuery } from "@tanstack/react-query";
 import React, { useId } from "react";
 
+interface Credential {
+  id: string;
+  name: string;
+}
+
 const CredentialsParam = ({ param, updateNodeParamValue, value }: ParamProps) => {
   const id = useId();
   const query = useQuery({
@@ -37,7 +42,7 @@ const CredentialsParam = ({ param, updateNodeParamValue, value }: ParamProps) =>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Credentials</SelectLabel>
-            {query.data?.map((credential: any) => (
+            {query.data?.map((credential: Credential) => (
               <SelectItem key={credential.id} value={credential.id}>
                 {credential.name}
               </SelectItem>

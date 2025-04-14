@@ -1,9 +1,4 @@
 import { ExecutionEnvironment } from '@/utils/types/executor';
-import puppeteer from 'puppeteer';
-import { LaunchBrowserTask } from '../task/launch-browser';
-import { PageToHtmlTask } from '../task/page-to-html';
-import { FillInputTask } from '../task/fill-input';
-import { ClickElementTask } from '../task/click-element';
 import { ExtractDataWithAITask } from '../task/extract-data-with-ai';
 import prisma from '@/lib/prisma';
 import { symmetricDecrypt } from '@/lib/encryption';
@@ -81,8 +76,12 @@ export async function ExtractDataWithAIExecutor(environment: ExecutionEnvironmen
         environment.setOutput('Extracted data', result);
 
         return true;
-    } catch (error: any) {
-        environment.log.error(error.message);
+    } catch (error) {
+        if (error instanceof Error) {
+            environment.log.error(error.message);
+        } else {
+            environment.log.error('An unknown error occurred');
+        }
         return false;
     }
 }

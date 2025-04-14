@@ -15,8 +15,12 @@ export async function LaunchBrowserExecutor(environment: ExecutionEnvironment<ty
         environment.setPage(page);
         environment.log.info(`Opened page at: ${websiteUrl}`);
         return true;
-    } catch (error: any) {
-        environment.log.error(error.message);
+    } catch (error) {
+        if (error instanceof Error) {
+            environment.log.error(error.message);
+        } else {
+            environment.log.error('An unknown error occurred');
+        }
         return false;
     }
 }
