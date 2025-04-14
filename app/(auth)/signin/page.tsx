@@ -19,7 +19,7 @@ import { z } from "zod";
 import Link from "next/link";
 import { useState } from "react";
 import { authClient } from "@/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 
 import { ErrorContext } from "@better-fetch/fetch";
@@ -27,6 +27,10 @@ import { FaGithub, FaGoogle } from "react-icons/fa";
 
 export default function SignIn() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  const callbackUrl = searchParams?.get('callbackUrl') || '/';
+
   const { toast } = useToast();
   const [pendingCredentials, setPendingCredentials] = useState(false);
   const [pendingGithub, setPendingGithub] = useState(false);
@@ -52,7 +56,7 @@ export default function SignIn() {
           setPendingCredentials(true);
         },
         onSuccess: async () => {
-          router.push("/");
+          router.push(decodeURI(callbackUrl));
           router.refresh();
         },
         onError: (ctx: ErrorContext) => {
@@ -78,7 +82,7 @@ export default function SignIn() {
           setPendingGithub(true);
         },
         onSuccess: async () => {
-          router.push("/");
+          router.push(decodeURI(callbackUrl));
           router.refresh();
         },
         onError: (ctx: ErrorContext) => {
