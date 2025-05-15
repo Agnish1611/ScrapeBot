@@ -11,16 +11,17 @@ import ExecutionStatusChart from "./_components/execution-status-chart";
 import { getCreditsUsageInPeriod } from "@/actions/analytics/getCreditsUsageInPeriod";
 import CreditUsageChart from "../billing/_components/credit-usage-chart";
 
-export default (async function Page({ 
-  searchParams 
-}: { 
-  searchParams: { month?: string; year?: string } 
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ month?: string; year?: string }>;
 }) {
+  const { month: monthStr, year: yearStr } = await searchParams;
+
   const currentDate = new Date();
-  
   const period: Period = {
-    month: searchParams.month ? parseInt(searchParams.month) : currentDate.getMonth(),
-    year: searchParams.year ? parseInt(searchParams.year) : currentDate.getFullYear(),
+    month: monthStr ? parseInt(monthStr, 10) : currentDate.getMonth(),
+    year:  yearStr  ? parseInt(yearStr, 10)  : currentDate.getFullYear(),
   };
 
   return (
@@ -44,7 +45,7 @@ export default (async function Page({
       </div>
     </div>
   );
-}) as unknown as import("next").NextPage;
+}
 
 async function PeriodSelectorWrapper({
   selectedPeriod,
