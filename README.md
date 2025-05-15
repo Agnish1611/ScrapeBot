@@ -49,8 +49,8 @@ Since this is a personal project, **you’ll need to add your own OpenAI API key
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/web-scraper-workflow-builder.git
-cd web-scraper-workflow-builder
+git clone https://github.com/Agnish1611/ScrapeBot.git
+cd ScrapeBot
 ```
 
 ### 2. Set Up Environment Variables
