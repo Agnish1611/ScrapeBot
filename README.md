@@ -102,7 +102,3 @@ npm run dev
 ```
 
 Then open [http://localhost:3000](http://localhost:3000) in your browser to use the visual scraper builder.
-
----
-
-Let me know if you'd like to auto-deploy this via Vercel or add CI/CD setup instructions!
