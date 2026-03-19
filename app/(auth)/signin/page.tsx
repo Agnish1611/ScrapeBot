@@ -22,7 +22,7 @@ import { authClient } from "@/auth-client";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 
-import { ErrorContext } from "@better-fetch/fetch";
+// removed ErrorContext import
 // import { FaGithub } from "react-icons/fa";
 
 export default function SignIn() {
@@ -62,7 +62,7 @@ export default function SignIn() {
           router.push(decodeURI(callbackUrl));
           router.refresh();
         },
-        onError: (ctx: ErrorContext) => {
+        onError: (ctx) => {
           console.log(ctx);
           toast({
             title: "Something went wrong",
@@ -88,7 +88,7 @@ export default function SignIn() {
   //         router.push(decodeURI(callbackUrl));
   //         router.refresh();
   //       },
-  //       onError: (ctx: ErrorContext) => {
+  //       onError: (ctx) => {
   //         toast({
   //           title: "Something went wrong",
   //           description: ctx.error.message ?? "Something went wrong.",

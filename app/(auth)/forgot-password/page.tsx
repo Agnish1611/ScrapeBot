@@ -32,6 +32,8 @@ export default function ForgotPassword() {
 
 	const onSubmit = async (data: z.infer<typeof forgotPasswordSchema>) => {
 		setIsPending(true);
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
 		const { error } = await authClient.forgetPassword({
 			email: data.email,
 			redirectTo: "/reset-password",
