@@ -12,7 +12,7 @@ import { usePathname } from "next/navigation";
 
 const BreadcrumbHeader = () => {
   const pathname = usePathname();
-  const paths = pathname == "/" ? [""] : pathname.split("/");
+  const paths = pathname === "/dashboard" ? [""] : pathname.split("/");
 
   return (
     <Breadcrumb>
@@ -20,7 +20,7 @@ const BreadcrumbHeader = () => {
         {paths.map((path, index) => (
           <React.Fragment key={index}>
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/${path}`} className="font-bold">
+              <BreadcrumbLink href={path === "" ? "/dashboard" : `/${path}`} className="font-bold">
                 {path === "" ? "home" : path}
               </BreadcrumbLink>
             </BreadcrumbItem>

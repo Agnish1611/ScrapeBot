@@ -4,7 +4,7 @@ import { SidebarItems } from "../types/sidebar";
 export const sidebarItems: SidebarItems = [
     {
         title: "Home",
-        url: "/",
+        url: "/dashboard",
         icon: Home,
     },
     {

@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
   const authToken = request.cookies.get('better-auth.session_token')?.value
   
   // Define public paths that don't require authentication
-  const publicPaths = ['/signin', '/signup', '/forgot-password', '/reset-password', '/email-verified', '/api/auth']
+  const publicPaths = ['/', '/signin', '/signup', '/forgot-password', '/reset-password', '/email-verified', '/api/auth', '/assets']
   
   // Check if the current path is public
   const isPublicPath = publicPaths.some(publicPath => 
@@ -26,9 +26,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
   
-  // If user is accessing login page but already has a token, redirect to home
+  // If user is accessing login page but already has a token, redirect to dashboard
   if (path === '/signin' && authToken) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL('/dashboard', request.url))
   }
   
   // Allow the request to proceed
@@ -44,8 +44,9 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public folder
+     * - assets folder
+     * - image files (svg, png, jpg, jpeg, gif, webp)
      */
-    '/((?!_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!_next/static|_next/image|favicon.ico|assets|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
